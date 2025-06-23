@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Book 1 | The Bookmark</title>
+</head>
+<body>
+    <%- include("partials/nav.ejs", {title: "Welcome back!"})%>
+    <div class="container">
+        <div class="modal">
+            <h1><%= book.title></h1>
+            
+        </div>
+    </div>
+    <%- include("partials/footer.ejs")%>
+</body>
+</html>
