@@ -6,10 +6,15 @@
     <link rel="stylesheet" href="/style.css">
     <title><%= user.email %>'s Dashboard | The Bookmark</title>
     <style>
-        /* Dropdown styles */
+        h2 {
+            font-size: clamp(0.75rem, 2.5vw, 1.8rem);
+            word-break: break-word;
+            max-width: 100%;
+        }
         .dropdown {
             position: relative;
             display: inline-block;
+            margin-right: 1rem;
         }
 
         .dropdown-btn {
@@ -26,7 +31,6 @@
             display: none;
             position: absolute;
             background-color: #f9f9f9;
-            left: -1rem;
             min-width: 160px;
             box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
             z-index: 1;
@@ -64,14 +68,17 @@
     <div class="container1">
         <div class="modal1">
             <div class="top">
-                <h1>Welcome <%= user.email %></h1>
                 <div class="dropdown">
-                    <button class="dropdown-btn">Manage Books</button>
+                    <button class="dropdown-btn">Manage account</button>
                     <div class="dropdown-content">
                         <a href="/add-book">Add Book</a>
                         <a href="/logout">LogOut</a>
+                        <a href="/completed">Completed Books</a>
+                        <a href="/reading">Ongoing Books</a>
+                        <a href="/dashboard">All Books</a>
                     </div>
                 </div>
+                <h2>Welcome <%= user.email %></h2>
             </div>
 
 

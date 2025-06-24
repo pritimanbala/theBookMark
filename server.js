@@ -9,6 +9,8 @@ const UserRev = require('./routes/userRev');
 const User = require("./schemas/user")
 const cookieParser = require('cookie-parser');
 const requireAuth = require('./middleware/authMiddleware');
+const BooksHandler = require('./routes/adBoks');
+const BookUpd = require('./routes/booksFind');
 
 const app = express();
 app.set('view engine', 'ejs');
@@ -35,74 +37,7 @@ app.use(session({
 
 
 app.use(UserAuth);
-
-app.use( DashboardController);
-
-app.get("/books/:id", requireAuth, async (req, res) => {
-    try {
-        if (!req.session.user || !req.session.user._id) {
-            return res.redirect("/login"); 
-        }
-
-        const updatedUser = await User.findById(req.session.user._id);
-        const bookId = req.params.id;
-        const bookDetails = await Books.findById(bookId);
-
-        if (!bookDetails) {
-            return res.status(404).send("Book not found");
-        }
-
-        req.session.regenerate((err) => {
-            if (err) {
-                console.error("Error regenerating session:", err);
-                return res.status(500).send("Session Error");
-            }
-
-            req.session.user = updatedUser.toObject();
-
-            res.render("booksDetails", {
-                book: bookDetails,
-                title: "Book Details",
-                user: req.session.user
-            });
-        });
-
-    } catch (err) {
-        console.error("Error in /books/:id route:", err);
-        res.status(500).send("Internal Server Error");
-    }
-});
-
-
+app.use(DashboardController);
+app.use(BookUpd);
 app.use(UserRev);
-
-app.get('/add-book', requireAuth, (req, res) => {
-    res.render('addBook', { user: req.session.user });
-});
-
-app.post('/add-book', requireAuth, async (req, res) => {
-    const { title, genre, pages } = req.body;
-
-    try {
-        const newBook = new Books({
-            title,
-            genre,
-            pages: parseInt(pages)
-        });
-        await newBook.save();
-        res.redirect('/dashboard');
-    } catch (err) {
-        console.error("Error adding book:", err);
-        res.status(500).send("Failed to add book");
-    }
-});
-app.get("/delete-book/:id", requireAuth, async (req, res) => {
-    const bookId = req.params.id;
-    try {
-        await Books.findByIdAndDelete(bookId);
-        res.redirect("/dashboard");
-    } catch (err) {
-        console.error("Error deleting book:", err);
-        res.status(500).send("Error deleting book");
-    }
-});
+app.use(BooksHandler);

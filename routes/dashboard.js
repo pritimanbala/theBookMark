@@ -18,11 +18,51 @@ DashboardController.get('/dashboard',requireAuth, async (req, res) => {
       user: req.session.user,
       books: books
     });
-    console.log(books);
   } catch (err) {
     console.error("Error fetching books:", err);
     res.status(500).send("Internal Server Error");
   }
 });
 
+
+DashboardController.get('/completed', requireAuth, async (req, res) => {
+  try {
+    const user = req.session.user;
+    const books = await Books.find().sort({createdAt: -1});
+    console.log("these books were logged", user.books);
+    const compBooks = user.books.filter(book => book.status === 'not-reading');
+    const bookIds = compBooks.map(entry => entry.bookID);
+
+    const completedBooks = await Books.find({_id: {$in : bookIds}}).sort({createdAt: -1});
+    res.render("dashboard", {
+      title: "completed Books",
+      user: req.session.user,
+      books: completedBooks
+    });
+  } catch (error) {
+    console.error("Error fetching books:", error);
+    res.status(500).send("Internal Server Error");
+  }
+})
+
+DashboardController.get('/reading', requireAuth, async (req, res) => {
+  try {
+    const user = req.session.user;
+    const books = await Books.find().sort({createdAt: -1});
+    console.log("these books were logged", user.books);
+    const compBooks = user.books.filter(book => book.status === 'reading');
+    const bookIds = compBooks.map(entry => entry.bookID);
+
+    const completedBooks = await Books.find({_id: {$in : bookIds}}).sort({createdAt: -1});
+    res.render("dashboard", {
+      title: "Reading Books",
+      user: req.session.user,
+      books: completedBooks
+    });
+  } catch (error) {
+    console.error("Error fetching books:", error);
+    
+    res.status(500).send("Internal Server Error");
+  }
+})
 module.exports = DashboardController;

@@ -39,14 +39,16 @@
                         <p>Genre: <%= book.genre %>
                         </p>
                         <p>Total Pages: <%= book.pages %>
-                        </p>
-                        <% if (readingEntry) { %>
-                            <p>Current Page: <%= readingEntry.pages %>
-                            </p>
-                            <p>Status: <span class="status">Reading</span></p>
-                            <% } else { %>
-                                <p>Status: <span class="status-not">Not Reading</span></p>
-                                <% } %>
+                        </p><% if (!readingEntry) { %>
+                        <p class="st">Status: <span class="status-not">Not Reading</span></p>
+                        <% } else if(readingEntry.status === 'reading') { %>
+                            <p class="st">Status: <span class="status">Reading</span></p>
+                            <p>Current Page: <%= readingEntry.pages %></p>
+                        <% } else { %>
+                            <p class="st">Status: <span class="status-comp">Completed</span></p>
+                            <p>Current Page: <%= readingEntry.pages %></p>
+                        <% } %>
+
                     </div>
 
                     <% if (readingEntry) { %>

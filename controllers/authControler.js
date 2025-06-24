@@ -60,7 +60,7 @@ module.exports.signup_post = async (req, res) => {
     try {
         const email = req.body.email.trim().toLowerCase();
         const password = req.body.password;
-        console.log(email, password);
+        console.log('new user',email, password);
         //upto here its fine
         const existingUser = await User.findOne({ email });
 
@@ -77,6 +77,7 @@ module.exports.signup_post = async (req, res) => {
         res.status(201).json({ redirect: "/dashboard" });
     } catch (err) {
         const errors = handleErrors(err);
+        
         res.status(500).json({ errors });
     }
 }
