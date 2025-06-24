@@ -11,7 +11,7 @@ const cookieParser = require('cookie-parser');
 const requireAuth = require('./middleware/authMiddleware');
 const BooksHandler = require('./routes/adBoks');
 const BookUpd = require('./routes/booksFind');
-
+//all the middle wares are here
 const app = express();
 app.set('view engine', 'ejs');
 app.set('views', './views');
@@ -19,6 +19,7 @@ app.use(express.static('public'));
 app.use(cookieParser());
 app.use(express.json());  
 app.use(express.urlencoded({ extended: true }));
+// after connection we hosted our service otherwise i could lead to problem
 mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
 .then(() => {
     console.log("Connected to MongoDB successfully");
@@ -28,13 +29,14 @@ mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopol
         console.log("Server not started due to MongoDB connection error");
     });
 
-
+//created a session
 app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
 }));
 
+//all the handlers used are placed correctly
 
 app.use(UserAuth);
 app.use(DashboardController);

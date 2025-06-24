@@ -6,7 +6,7 @@ const BookSchema = new mongoose.Schema({
   bookID: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Books',
-    required: [true, "Book ID is required"]
+    required: [true, "Book ID is required"] //if true then goes with it but if not then returns the error of bookId is required 
   },
   pages: {
     type: Number,
@@ -37,12 +37,13 @@ const user = new mongoose.Schema({
   },
   books: {
     type: [BookSchema],
-    default: []
+    default: [] // if booksSchema is not present then it will give you an empty string
   }
 });
 
 
 user.pre("save", async function(next) {
+  // this if is used so that in login or save it doesnt hashes the password again and is isModified is used for that
   if (this.isModified('password')) {
     const salt = await bcrypt.genSalt();
     this.password = await bcrypt.hash(this.password, salt);
@@ -50,11 +51,13 @@ user.pre("save", async function(next) {
   next();
 });
 
-
+//we made a static function and then we can use it like res.login('')
 
 user.statics.login = async function (email, password) {
+  // checking through email
   const user = await this.findOne({ email });
   if (user){
+    //comparing hashed password and given password
     const auth = await bcrypt.compare(password, user.password);
     if(auth){
       return user;

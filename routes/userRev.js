@@ -19,16 +19,14 @@ UserRev.post('/user-review-a/:id', async (req, res) => {
     //taking book and user detais
     const user = await User.findById(userId);
     const book = await Books.findById(bookId);
-    let status = ""
+    let status = "" //dont put that as constant
     //checking the page doesn't exceeds
     if(book.pages < currentPage){
       return res.status(400).send('Pages Exceeded than the book')
-    }else if (book.pages ===  currentPage){
-      status = "completed";
     }else if (book.pages > currentPage){
       status = 'reading';
     }else{
-      status = 'not-reading';
+      status = 'completed';
     }
     //final push of details of data
     user.books.push({
@@ -65,12 +63,10 @@ UserRev.post('/user-review-e/:id', async (req, res) => {
         let status = ''
         if(book.pages < currentPage){
           return res.status(400).send('Pages Exceeded than the book')
-        }else if (book.pages === parseInt(currentPage)){
-          status = "completed";
         }else if (book.pages > currentPage){
           status = 'reading';
         }else{
-          status = 'not-reading';
+          status = 'completed';
         }
 
         if (!user) {
